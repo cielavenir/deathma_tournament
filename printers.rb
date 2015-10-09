@@ -17,7 +17,7 @@ class PrinterIntermidiate
 				(-10*(v.size-1)).to_s+' point',
 				v.map{|e|e[:grade]}.min,
 				(v.map{|e|e[:grade]}.reduce(:+)+v.size/2)/v.size,
-				v.map{|e|e[:grade]}.min+10*(v.size-1),
+				-( v.map{|e|e[:grade]}.min+10*(v.size-1) ),
 			]
 		}
 
@@ -35,7 +35,7 @@ class PrinterIntermidiate
 		handle.puts
 		handle.puts '|言語名|人数|言語ペナルティ|最小Byte数|平均Byte数|ペナルティ|'
 		handle.puts '|:--|:--|:--|:--|:--|:--|'
-		result.sort_by{|e|e[5]}.each{|e|
+		result.sort_by{|e|-e[5]}.each{|e|
 			handle.puts '|'+e.join('|')+'|'
 		}
 	end
@@ -82,7 +82,7 @@ class PrinterFinal
 		handle.puts '※付与するバッジは一番上位のものを1つだけです。'
 		handle.puts '※以下のリストは敬称略'
 		handle.puts
-		handle.puts '|言語|文字数|名前|'
+		handle.puts '|言語|Byte数|名前|'
 		handle.puts '|:--|:--|:--|'
 		[shortest.min_by{|e|e[1].to_i}].each{|e|
 			handle.puts '|'+e.join('|')+'|'
@@ -94,7 +94,7 @@ class PrinterFinal
 		handle.puts '※付与するバッジは一番上位のものを1つだけです。'
 		handle.puts '※以下のリストは敬称略'
 		handle.puts
-		handle.puts '|言語|文字数|名前|'
+		handle.puts '|言語|Byte数|名前|'
 		handle.puts '|:--|:--|:--|'
 		shortest.sort.each{|e|
 			handle.puts '|'+e.join('|')+'|'

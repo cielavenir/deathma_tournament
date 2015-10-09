@@ -11,18 +11,19 @@ require_relative 'printers'
 require_relative 'tournament'
 
 if __FILE__==$0
-	if ARGV.size<1
+	if ARGV.size<1 && STDIN.tty?
 		STDERR.puts 'main_process.rb data.json >output.md'
 		exit
 	end
 
 	grader=GraderBytesize.new
-	data=JSON.parse($<.read).map!{|e|
+	data=JSON.parse($<.read,symbolize_names:true).map!{|e|
 		e[:grade]=grader.grade(e[:code])
+		e
 	}
 
-	if false
-		PrinterIntermidiate(data,STDOUT)
+	if true
+		PrinterIntermidiate.print(data,STDOUT)
 	else
 		penalty=PrinterFinal.print(data,STDOUT)
 		Tournament.do_tournament(data,penalty,STDOUT)
