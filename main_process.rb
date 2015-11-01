@@ -22,11 +22,14 @@ if __FILE__==$0
 		e
 	}
 
-	if true
+	if false
 		PrinterIntermidiate.print(data,STDOUT)
 	else
-		penalty=PrinterFinal.print(data,STDOUT)
-		Tournament.do_tournament(data,penalty,STDOUT)
+		badge={}
+		data.each{|e|badge[e[:nickname]]=0}
+		penalty=PrinterFinal.print(data,STDOUT,badge)
+		Tournament.do_tournament(data,penalty,STDOUT,badge)
+		#badge.each{|k,v|puts k+','+BADGE_NAME[v]}
 	end
 end
 

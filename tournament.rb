@@ -9,14 +9,15 @@ class Tournament
 			'ベスト'+n.to_s
 		end
 	end
-	def self.do_tournament(data,penalty,handle)
+	def self.do_tournament(data,penalty,handle,badge)
 		num=1
 		num*=2 while num<data.size
 		first=num!=data.size
-		handle.puts '## トーナメント結果発表'
+		handle.puts '## 3.トーナメント結果発表'
 		handle.puts 'お待たせ致しました！'
 		handle.puts 'トーナメント結果の発表です。'
 		handle.puts '結果はベスト'+(num/(first ? 2 : 1)).to_s+'から発表致します。'
+		handle.puts
 
 		#participants=data(降順)、いない人を適当数加え、1回リフルシャッフルする。
 		#dataをシャッフルしないのは、早く出した人は優先的に「予選通過」とするためである(tails氏の案)。
@@ -44,6 +45,16 @@ class Tournament
 						win==0 ? '○' : '×',x[:nickname],x[:lang],-penalty[x[:lang]],-x[:grade],x_result,random ? '○' : '×',
 						win==1 ? '○' : '×',y[:nickname],y[:lang],-penalty[y[:lang]],-y[:grade],y_result,random ? '○' : '×',
 					]
+					if participants.size<=2
+						badge[x[:nickname]]=[badge[x[:nickname]],3].max
+						badge[y[:nickname]]=[badge[y[:nickname]],3].max
+					elsif participants.size<=16
+						badge[x[:nickname]]=[badge[x[:nickname]],2].max
+						badge[y[:nickname]]=[badge[y[:nickname]],2].max
+					elsif participants.size<=32
+						badge[x[:nickname]]=[badge[x[:nickname]],1].max
+						badge[y[:nickname]]=[badge[y[:nickname]],1].max
+					end
 					handle.puts '|-|||||||' if !first&&idx>0
 					handle.puts result_str if !first
 					participants_next<<[x,y][win]
@@ -62,5 +73,10 @@ class Tournament
 		handle.puts '後日 CodeIQ 運営担当より連絡させていただきます。'
 		handle.puts (participants_prev-participants)[0][:nickname]+' 様も準優勝おめでとうございます。'
 		handle.puts 'お二人にはデスマコロシアム チャンピオンバッジを付与致します。'
+		handle.puts
+		handle.puts 'ベスト16まで勝ち残った方にはデスマコロシアム 豪傑バッジを付与致します。'
+		handle.puts 'ベスト32まで勝ち残った方にはデスマコロシアム 強豪バッジを付与致します。'
+		handle.puts 'トーナメントに参加された方にはデスマコロシアム ファイターバッジを付与致します。'
+		handle.puts
 	end
 end
